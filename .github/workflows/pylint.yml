@@ -21,3 +21,21 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install pylint
+
+    - name: Lint, format, and type-check
+        run: |
+          pip3 install flake8
+          #- pip3 install flake8-docstrings
+          pip3 install flake8-comprehensions
+          pip3 install pep8-naming
+          # stop the build if there are Python syntax errors or undefined names
+          flake8 --config=.flake8 .
+          black --check --verbose .
+          # exit-zero treats all errors as warnings.
+          # diverting from the standard 79 character line length in
+          # accordance with this:
+          # https://www.python.org/dev/peps/pep-0008/#a-foolish-consistency-is-the-hobgoblin-of-little-minds
+          flake8 . --count --exit-zero --statistics --select=E,F,W,C90
+          # Run type checker in CI such that type errors can be identified and gradually addressed.
+          # Once all existing type errors are addressed, the `|| echo` after the mypy call can be removed.
+          mypy syft || echo "Type errors found, continuing build..."
