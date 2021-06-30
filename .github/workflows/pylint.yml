@@ -22,6 +22,7 @@ jobs:
         python -m pip install --upgrade pip
         pip install pylint
         pip install black
+        pip install mypy
 
     - name: Lint, format, and type-check
       run: |
